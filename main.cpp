@@ -70,19 +70,21 @@ net income: net_income
 
 
 //functions
-int validation_integer(int min, int max);//validate integer ee ID
-float validation_float(float min, float max);//validate gross pay
-void greeting();//welcome & name
-float gross_pay_func();//deductions from gross pay
+int validation_integer(int min,
+                       int max);//validate integer ee ID
+float validation_float(float min,
+                       float max);//validate gross pay
+string greeting();//welcome & name
+float
+gross_pay_func();//deductions from gross pay
 int emp_id_func();
 
 int main() {
 
     //VARIABLES
-    int width_output_1 = 29;//user's employee ID, width of paycheck printout lines, left side justified
-    int width_output_2 = 10; //right side justified
+    string emp_name; //employee name
     int emp_id;//user's employee ID
-
+    //monthly pay
     float gross_pay; //user's gross pay
 //taxes & retirement - rates
     float state_tax_rate, medicare_tax_rate, soc_sec_tax_rate,
@@ -97,9 +99,10 @@ int main() {
 //END VARIABLES
 
 //PROGRAM
-    //greeting();
+    greeting();
+    emp_name = greeting();
     emp_id = emp_id_func();
-    cout<<emp_id<<endl;
+    cout << emp_id << endl;
     gross_pay = gross_pay_func();
 
     //tax rates
@@ -115,48 +118,83 @@ int main() {
 
 //tax totals
     fed_tax = fed_tax_rate * gross_pay;
-    state_tax = state_tax_rate * gross_pay;
-    medicare_tax = medicare_tax_rate * gross_pay;
-    soc_sec_tax = soc_sec_tax_rate * gross_pay;
+    state_tax =
+            state_tax_rate * gross_pay;
+    medicare_tax = medicare_tax_rate *
+                   gross_pay;
+    soc_sec_tax = soc_sec_tax_rate *
+                  gross_pay;
 
 //% deductions
-    retire_ded = retire_ded_perc * gross_pay;
+    retire_ded =
+            retire_ded_perc * gross_pay;
+
+//calculations
+    sum_deductions =
+            state_tax + medicare_tax +
+            soc_sec_tax + retire_ded +
+            life_ins_amt +
+            health_ins_amt;
+    net_pay =
+            gross_pay - sum_deductions;
+    take_home_percent =
+            net_pay / gross_pay *100;
+
+//DISPLAY
+//employee and pay information
+    cout << "Enter employee's ID: "
+         << emp_id << endl;
+    cout
+            << "Enter employee's full name: "
+            << emp_name << endl;
+    cout<< "Enter employee's gross "
+           "salary: "<< setw(10)
+           <<setfill(' ') << right<< fixed << setprecision(2)<< gross_pay << endl<< endl;
+    cout << "Paycheck for: " << emp_name<< ", employee ID " << emp_id<< endl << endl;
+    cout << "Deductions" << endl;
 
 
-    sum_deductions = state_tax + medicare_tax + soc_sec_tax + retire_ded  + life_ins_amt + health_ins_amt;
-    net_pay = gross_pay - sum_deductions;
-    take_home_percent = net_pay / gross_pay;
-
-    cout << left << setw(30) << setfill('.') << "state tax" << "$" << setw(11) << setfill(' ') << right
-         << fixed << setprecision(2) << state_tax << endl;
-    cout << "+ " << setw(2)  << endl;
-    // display dashes underneath 2nd number and answer
-
-    cout << "Sum deductions " <<setfill('.') << setw(width_output_1) << "." << "$" << " " << sum_deductions<< endl;
+    cout << left << setw(33)<< setfill('.')<< "Federal Tax" << "$"<< setw(10)<< setfill(' ') << right<< fixed << setprecision(2)<< fed_tax << endl;
+    cout << left << setw(33)<<setfill('.')<< "State Tax" <<"$"<< setw(10)<< setfill(' ') <<right<< fixed << setprecision(2)<< state_tax <<endl;
+    cout << left << setw(33)<<setfill('.')<< "Social Security ""Tax" << "$" <<setw(10)<< setfill(' ') <<right<< fixed << setprecision(2)<<soc_sec_tax<< endl;
+    cout << left << setw(33)<< setfill('.')<< "Medicare Tax" << "$"<< setw(10)<< setfill(' ') << right<< fixed << setprecision(2)<< medicare_tax<< endl;
+    cout << left << setw(33)<<setfill('.')<< "Retirement Plan" << "$"<< setw(10)<< setfill(' ') << right<< fixed << setprecision(2)<< retire_ded<< endl;
+    cout << left << setw(33)<< setfill('.')<< "Health Insurance" << "$"<< setw(10)<< setfill(' ') << right<< fixed << setprecision(2)<< health_ins_amt<< endl;
+    cout << left << setw(33)<< setfill('.')<< "Life Insurance" << "$"<< setw(10)<< setfill(' ') << right<< fixed << setprecision(2)<< life_ins_amt<< endl << endl;
+    cout << left << setw(33)<< setfill('.')<< "Net Pay" << "$"<< setw(10)<< setfill(' ') << right<< fixed << setprecision(2)<< net_pay << endl;
+    cout << left << setw(33)<< setfill('.')<< "Percent take home"<< setw(10)<< setfill(' ') <<right<< fixed << setprecision(0)<<take_home_percent<< "%"<<endl;
     return 0;
 }
 //FUNCTION DEFINITIONS
 
-void greeting() {
-    string user_name;
-    cout << "Hi! Welcome to Carrie's Calculator! What is your name? ";
-    cin >> user_name;
-    cout << "Hi " << user_name << "! Let's play!" << endl;
+string greeting() {
+    string emp_name;
+    cout
+            << "Hi! Welcome to "
+               "Carrie's Paycheck "
+               "Calculator. Please be"
+               " prepared with your monthly gross pay and I will calculate "
+               "your deductions and net pay.";
+    cout << "Enter your full name:  ";
+    cin >> emp_name;
+    return emp_name;
 }
 
 float gross_pay_func() {
 
-    cout << "Please enter your monthly gross pay in dollars and cents; do not include commas. For example: 50500.00. "
-         << endl;
+    cout
+            << "Please enter your monthly gross pay in dollars and cents; do not include commas. For example: 50500.00. "
+            << endl;
     //ask for user gross monthly salary
-       float min = 1;
+    float min = 1;
     float max = 99999999;
     return validation_float(min, max);
 }
 
 int emp_id_func() {
 
-    cout << "Please enter your employee ID: ";
+    cout
+            << "Please enter your employee ID: ";
 
 
     int min = 0, max = 9999;
@@ -164,13 +202,18 @@ int emp_id_func() {
 }
 
 
-int validation_integer(int min, int max) //function to validate integers
+int validation_integer(int min,
+                       int max) //function to validate integers
 {
     int number;
     cin >> number;
-    while (!cin or (number < min) or (number > max)) {
+    while (!cin or (number < min) or
+           (number > max)) {
 // Explain error not entering an integer
-        cout << "I'm sorry that's not a valid entry. Please enter a number between " << min << "and " << max << ": ";
+        cout
+                << "I'm sorry that's not a valid entry. Please enter a number between "
+                << min << "and " << max
+                << ": ";
 // Clear input stream
         cin.clear();
 // Discard previous input
@@ -181,14 +224,19 @@ int validation_integer(int min, int max) //function to validate integers
     return number;
 }
 
-float validation_float(float min, float max) //function to validate integers
+float validation_float(float min,
+                       float max) //function to validate integers
 {
     float number;
     cin >> number;
 
-    while (!cin or (number < min) or (number > max)) {
+    while (!cin or (number < min) or
+           (number > max)) {
 // Explain error not entering an integer
-        cout << "I'm sorry that's not a valid entry. Please enter a number between " << min << "and " << max << ": ";
+        cout
+                << "I'm sorry that's not a valid entry. Please enter a number between "
+                << min << "and " << max
+                << ": ";
 // Clear input stream
         cin.clear();
 // Discard previous input
