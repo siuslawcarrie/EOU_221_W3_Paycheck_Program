@@ -58,7 +58,7 @@ net income: net_income
  * 2 *Calculate federal tax from gross pay
  * 5. Calculate state tax from gross pay
  * 6. Calculate Medicare tax from gross pay
- * 7. Calculate social security tax from gross pay
+ * RWIDTH. Calculate social security tax from gross pay
  * 8. Sum all taxes = total taxes
  * 10. Add all taxes, health insurance and life insurance = total deductions
  * 11. Deduct total deductions from gross pay = net pay
@@ -74,10 +74,14 @@ int validation_integer(int min,
                        int max);//validate integer ee ID
 float validation_float(float min,
                        float max);//validate gross pay
-string greeting();//welcome & name
-float
-gross_pay_func();//deductions from gross pay
-int emp_id_func();
+float gross_pay_func(string emp_name);//deductions from gross pay
+int emp_id_func();//get employee's ID
+string emp_name_func();//get employee's name
+//CONSTANTS
+//left width
+const int LWIDTH=32;
+//right width
+const int RWIDTH=7;
 
 int main() {
 
@@ -96,14 +100,14 @@ int main() {
     float life_ins_amt, health_ins_amt;
 //totals
     float sum_deductions, net_pay;
+
 //END VARIABLES
 
 //PROGRAM
-    greeting();
-    emp_name = greeting();
     emp_id = emp_id_func();
-    cout << emp_id << endl;
-    gross_pay = gross_pay_func();
+    emp_name = emp_name_func();
+
+    gross_pay = gross_pay_func(emp_name);
 
     //tax rates
     fed_tax_rate = 0.175;
@@ -130,74 +134,62 @@ int main() {
             retire_ded_perc * gross_pay;
 
 //calculations
-    sum_deductions =
-            state_tax + medicare_tax +
-            soc_sec_tax + retire_ded +
-            life_ins_amt +
-            health_ins_amt;
-    net_pay =
-            gross_pay - sum_deductions;
-    take_home_percent =
-            net_pay / gross_pay *100;
+    sum_deductions = fed_tax +
+    state_tax + medicare_tax + soc_sec_tax + retire_ded + life_ins_amt +
+    health_ins_amt;
+    net_pay = gross_pay - sum_deductions;
+    take_home_percent = net_pay / gross_pay * 100;
 
 //DISPLAY
-//employee and pay information
-    cout << "Enter employee's ID: "
-         << emp_id << endl;
-    cout
-            << "Enter employee's full name: "
-            << emp_name << endl;
-    cout<< "Enter employee's gross "
-           "salary: "<< setw(10)
-           <<setfill(' ') << right<< fixed << setprecision(2)<< gross_pay << endl<< endl;
-    cout << "Paycheck for: " << emp_name<< ", employee ID " << emp_id<< endl << endl;
-    cout << "Deductions" << endl;
 
+    cout << "Deductions" << endl<<endl;
 
-    cout << left << setw(33)<< setfill('.')<< "Federal Tax" << "$"<< setw(10)<< setfill(' ') << right<< fixed << setprecision(2)<< fed_tax << endl;
-    cout << left << setw(33)<<setfill('.')<< "State Tax" <<"$"<< setw(10)<< setfill(' ') <<right<< fixed << setprecision(2)<< state_tax <<endl;
-    cout << left << setw(33)<<setfill('.')<< "Social Security ""Tax" << "$" <<setw(10)<< setfill(' ') <<right<< fixed << setprecision(2)<<soc_sec_tax<< endl;
-    cout << left << setw(33)<< setfill('.')<< "Medicare Tax" << "$"<< setw(10)<< setfill(' ') << right<< fixed << setprecision(2)<< medicare_tax<< endl;
-    cout << left << setw(33)<<setfill('.')<< "Retirement Plan" << "$"<< setw(10)<< setfill(' ') << right<< fixed << setprecision(2)<< retire_ded<< endl;
-    cout << left << setw(33)<< setfill('.')<< "Health Insurance" << "$"<< setw(10)<< setfill(' ') << right<< fixed << setprecision(2)<< health_ins_amt<< endl;
-    cout << left << setw(33)<< setfill('.')<< "Life Insurance" << "$"<< setw(10)<< setfill(' ') << right<< fixed << setprecision(2)<< life_ins_amt<< endl << endl;
-    cout << left << setw(33)<< setfill('.')<< "Net Pay" << "$"<< setw(10)<< setfill(' ') << right<< fixed << setprecision(2)<< net_pay << endl;
-    cout << left << setw(33)<< setfill('.')<< "Percent take home"<< setw(10)<< setfill(' ') <<right<< fixed << setprecision(0)<<take_home_percent<< "%"<<endl;
+cout<<fixed<<setprecision(2);
+    cout << left << setw(LWIDTH) << setfill('.') << "Federal Tax" << "$" << setw(RWIDTH) << setfill(' ')
+         << right<< fed_tax << endl;
+    cout << left << setw(LWIDTH) << setfill('.') << "State Tax" << "$" << setw(RWIDTH) << setfill(' ')
+         << right  << state_tax << endl;
+    cout << left << setw(LWIDTH) << setfill('.') << "Social Security ""Tax" << "$" << setw(RWIDTH)
+         << setfill(' ') << right << soc_sec_tax << endl;
+    cout << left << setw(LWIDTH) << setfill('.') << "Medicare Tax" << "$" << setw(RWIDTH) << setfill(' ')
+         << right <<  medicare_tax << endl;
+    cout << left << setw(LWIDTH) << setfill('.') << "Retirement Plan" << "$" << setw(RWIDTH) << setfill(' ')
+         << right  << retire_ded << endl;
+    cout << left << setw(LWIDTH) << setfill('.') << "Health Insurance" << "$" << setw(RWIDTH)
+         << setfill(' ') << right << fixed << health_ins_amt << endl;
+    cout << left << setw(LWIDTH) << setfill('.') << "Life Insurance" << "$" << setw(RWIDTH) << setfill(' ')
+         << right << fixed << life_ins_amt << endl << endl;
+    cout << left << setw(LWIDTH) << setfill('.') << "Net Pay" << "$" << setw(RWIDTH) << setfill(' ')
+         << right << fixed << net_pay << endl;
+    cout << left << setw(LWIDTH) << setfill('.') << "Percent take home" << "%"<< setw(RWIDTH) << setfill(' ')
+         << right << fixed << setprecision(2) << take_home_percent  << endl;
     return 0;
 }
 //FUNCTION DEFINITIONS
 
-string greeting() {
+
+string emp_name_func() {
     string emp_name;
-    cout
-            << "Hi! Welcome to "
-               "Carrie's Paycheck "
-               "Calculator. Please be"
-               " prepared with your monthly gross pay and I will calculate "
-               "your deductions and net pay.";
-    cout << "Enter your full name:  ";
-    cin >> emp_name;
+    string emp_name_first;
+    string emp_name_last;
+    cout << "Enter employee's full name:";
+    cin.ignore(1, '\n');//ignore newline character from int input data
+    getline(cin, emp_name);
     return emp_name;
 }
 
-float gross_pay_func() {
-
-    cout
-            << "Please enter your monthly gross pay in dollars and cents; do not include commas. For example: 50500.00. "
-            << endl;
-    //ask for user gross monthly salary
+float gross_pay_func(string emp_name) {
+    cout << "Enter gross salary for " << emp_name << ":";//ask for user gross monthly salary
     float min = 1;
     float max = 99999999;
-    return validation_float(min, max);
+    float pay = validation_float(min, max);
+    cout << endl;
+    return pay;
 }
 
 int emp_id_func() {
-
-    cout
-            << "Please enter your employee ID: ";
-
-
-    int min = 0, max = 9999;
+    cout << "Enter employee's ID:";
+    int min = 1, max = 9999;
     return validation_integer(min, max);
 }
 
@@ -212,7 +204,7 @@ int validation_integer(int min,
 // Explain error not entering an integer
         cout
                 << "I'm sorry that's not a valid entry. Please enter a number between "
-                << min << "and " << max
+                << min << " and " << max
                 << ": ";
 // Clear input stream
         cin.clear();
